@@ -1,10 +1,8 @@
 package com.harshit.todoapp.fragment.listfragment
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.harshit.todoapp.R
 import kotlinx.android.synthetic.main.fragment_list.view.*
@@ -19,12 +17,20 @@ class ListFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         view.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
             //this helps to move to other fragment
+            findNavController().navigate(R.id.action_listFragment_to_addFragment)
 
         }
+        view.listLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
+        }
+        //populating the option menu
+        setHasOptionsMenu(true)
         return view
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list_fragment_menu,menu)
+    }
 
 }
