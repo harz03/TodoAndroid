@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.harshit.todoapp.R
 import com.harshit.todoapp.data.Priorities
+import com.harshit.todoapp.data.SharedViewModel
 import com.harshit.todoapp.data.TodoData
 import com.harshit.todoapp.data.TodoViewModel
 import kotlinx.android.synthetic.main.fragment_add.*
@@ -17,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_add.*
 class AddFragment : Fragment() {
 
 private val todoViewModel:TodoViewModel by viewModels()
+private val sharedViewModel:SharedViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,6 +28,8 @@ private val todoViewModel:TodoViewModel by viewModels()
         val view =  inflater.inflate(R.layout.fragment_add, container, false)
         //set menu
         setHasOptionsMenu(true)
+
+
 
         return  view
     }
@@ -44,12 +49,12 @@ private val todoViewModel:TodoViewModel by viewModels()
         val title = title_et.text.toString()
         val priorities = priorities_spinner.selectedItem.toString()
         val description = description_et.text.toString()
-        if(verifyDataFromUser(title,description)){
+        if(sharedViewModel.verifyDataFromUser(title,description)){
             //Inseting Into Database
             val data = TodoData(
                 0,
                 title,
-                convertPriority(priorities),
+                sharedViewModel.convertPriority(priorities),
                 description
 
             )
@@ -61,20 +66,5 @@ private val todoViewModel:TodoViewModel by viewModels()
             Toast.makeText(requireContext(),"Oops",Toast.LENGTH_SHORT).show()
         }
     }
-    private  fun verifyDataFromUser(title:String,description:String):Boolean{
-         if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)) {
-           return false
-        }
-       return true
-    }
-    private fun convertPriority(priorities:String):Priorities{
-        return when(priorities){
-            "High Priority"->{Priorities.HIGH}
-            "Low Priority"->{Priorities.MEDIUM}
-            "Medium Priority"->{Priorities.LOW}
-            else -> {
-                Priorities.LOW
-            }
-        }
-    }
+
 }
